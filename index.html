@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AyanIQ Digital — Digital Promotion Platform</title>
+  <meta name="description" content="Digital promotion platform for businesses, services, and professionals" />
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#FFFFFF',
+              dark: '#F5F5F5'
+            },
+            accent: {
+              DEFAULT: '#FF4500',
+              light: '#FF6347',
+              dark: '#CC3700'
+            },
+            neutralbg: '#F8F8F8'
+          },
+          fontFamily: {
+            'fraktur': ['UnifrakturMaguntia', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .glass {
+      backdrop-filter: blur(6px);
+      background-color: rgba(255,255,255,0.95);
+    }
+
+    .mobile-menu {
+      transition: all 0.3s ease-in-out;
+    }
+
+    .active-link {
+      color: #FF4500;
+      font-weight: 600;
+      position: relative;
+    }
+
+    .active-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #FF4500;
+    }
+
+    /* Smooth section transitions */
+    section {
+      scroll-margin-top: 80px;
+    }
+
+    /* Card hover effects */
+    .hover-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(255, 69, 0, 0.1);
+    }
+
+    /* Footer background with overlay */
+    .footer-bg {
+      position: relative;
+      overflow: hidden;
+    }
+
+  .footer-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cstyle%3Etext%7Bfont-family:'Arial',sans-serif;font-weight:bold;font-size:24px;fill:%23FF4500;%7D%3C/style%3E%3Crect width='400' height='300' fill='%23FFFFFF'/%3E%3Ctext x='50' y='40'%3EAD%3C/text%3E%3Ctext x='300' y='80'%3EAD%3C/text%3E%3Ctext x='100' y='120'%3EE-mail%3C/text%3E%3Ctext x='200' y='160'%3EDigital Marketing%3C/text%3E%3Ctext x='50' y='200'%3EWebsite%3C/text%3E%3Ctext x='250' y='240'%3ESEO%3C/text%3E%3Ctext x='150' y='280'%3EAD%3C/text%3E%3Ctext x='320' y='40'%3EAD%3C/text%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.1;
+  z-index: 1;
+}
+    .footer-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(248, 248, 248, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
+      z-index: 2;
+    }
+
+    .footer-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Blood orange gradient */
+    .blood-orange-gradient {
+      background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
+    }
+
+    .blood-orange-gradient-light {
+      background: linear-gradient(135deg, rgba(255, 69, 0, 0.1) 0%, rgba(255, 99, 71, 0.1) 100%);
+    }
+
+    /* Form styles */
+    .form-loading {
+      position: relative;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .form-loading::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-loading::before {
+      content: 'Submitting...';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      color: #FF4500;
+      font-weight: bold;
+    }
+
+    /* Success/Error messages */
+    .alert-success {
+      background-color: #d1fae5;
+      border-color: #10b981;
+      color: #065f46;
+    }
+
+    .alert-error {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+      color: #7f1d1d;
+    }
+  </style>
+</head>
+<body class="antialiased text-slate-800 bg-white">
+  <!-- Header with Navigation -->
+  <header class="sticky top-0 z-50 glass border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3">
+          <div class="text-sm font-semibold">
+            <div class="font-timesnewroman text-2xl text-gray-900">AyanIQ Digital</div>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center gap-6">
+          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="index.html">Home</a>
+          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#about">About Us</a>
+          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#services">Services</a>
+          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#clients">Clients</a>
+          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#consultation">Consultation</a>
+          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#careers">Careers</a>
+          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#contact">Contact Us</a>
+        </nav>
+
+        <!-- Right side - CTA and mobile menu -->
+        <div class="flex items-center gap-4">
+          <a href="promote.html" class="hidden sm:inline-block px-4 py-2 rounded-md text-white font-medium blood-orange-gradient hover:opacity-90 transition-opacity shadow-md">Promote Now</a>
+
+          <!-- Mobile menu button -->
+          <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md border border-slate-200 hover:bg-gray-50">
+            <i class="fas fa-bars text-gray-700"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu lg:hidden absolute top-16 left-0 right-0 bg-white border-b border-slate-200 shadow-lg hidden">
+      <div class="px-4 py-3 space-y-3">
+        <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="index.html">Home</a>
+        <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#about">About Us</a>
+        <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#services">Services</a>
+        <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#clients">Clients</a>
+        <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#consultation">Consultation</a>
+        <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#careers">Careers</a>
+        <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#contact">Contact Us</a>
+        <a href="promote.html" class="block px-3 py-2 mt-2 rounded-md text-white font-medium text-center blood-orange-gradient shadow-md">Promote Now</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section id="home" class="pt-16 pb-20 relative overflow-hidden">
+      <!-- Background Image -->
+      <div class="absolute inset-0 z-0">
+        <img
+          src="img_DM.png"
+          alt="Digital Marketing Background"
+          class="w-full h-full object-cover"
+          onerror="this.style.display='none'"
+          style="filter: brightness(0.9) contrast(1.2);"
+        >
+        <!-- Strong dark overlay for maximum text contrast -->
+        <div class="absolute inset-0 bg-gradient-to-r from-gray-900/60 via-gray-900/50 to-gray-900/60"></div>
+        <!-- Subtle brand color accent -->
+        <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-accent-light/20 mix-blend-screen"></div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-4xl mx-auto">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
+            Amplify Your <span class="text-accent drop-shadow-2xl">Digital</span> Presence
+          </h1>
+          <p class="mt-6 text-xl text-gray-100 max-w-3xl mx-auto font-semibold drop-shadow-xl">
+            From businesses and services to professionals and products—we help you get noticed, grow your audience, and achieve your goals through strategic digital promotion.
+          </p>
+
+          <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="promote.html" class="px-8 py-4 rounded-lg text-white font-bold text-lg shadow-2xl blood-orange-gradient hover:opacity-90 transition-opacity transform hover:scale-105 duration-300 drop-shadow-2xl">Start Promoting</a>
+            <a href="#services" class="px-8 py-4 rounded-lg border-2 border-white text-white hover:bg-white hover:text-accent transition-all duration-300 font-bold text-lg bg-white/20 backdrop-blur-lg drop-shadow-2xl">Explore Services</a>
+          </div>
+
+          <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="p-6 bg-white/20 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30">
+              <div class="text-3xl font-bold text-white mb-2 drop-shadow-lg">500+</div>
+              <div class="text-gray-100 font-medium">Clients Trust Us</div>
+            </div>
+            <div class="p-6 bg-white/20 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30">
+              <div class="text-3xl font-bold text-white mb-2 drop-shadow-lg">89%</div>
+              <div class="text-gray-100 font-medium">Growth Rate</div>
+            </div>
+            <div class="p-6 bg-white/20 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30">
+              <div class="text-3xl font-bold text-white mb-2 drop-shadow-lg">24/7</div>
+              <div class="text-gray-100 font-medium">Support Available</div>
+            </div>
+            <div class="p-6 bg-white/20 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30">
+              <div class="text-3xl font-bold text-white mb-2 drop-shadow-lg">360°</div>
+              <div class="text-gray-100 font-medium">Digital Solutions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section with Image -->
+    <section id="about" class="py-16 bg-neutralbg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-4xl font-bold text-gray-900">About <span class="text-accent">AyanIQ Digital</span></h2>
+            <p class="mt-4 text-lg text-gray-700">
+              We are a comprehensive digital promotion platform that connects businesses, services, and professionals with their target audiences. Our mission is to make digital growth accessible and effective for everyone.
+            </p>
+
+            <div class="mt-8 space-y-6">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-check text-accent"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg">Expert Team</h4>
+                  <p class="text-gray-600">Our team of digital experts brings years of experience in marketing, SEO, and brand development.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-check text-accent"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg">Proven Results</h4>
+                  <p class="text-gray-600">We've helped hundreds of clients achieve measurable growth in their digital presence.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-check text-accent"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg">Innovative Approach</h4>
+                  <p class="text-gray-600">We stay ahead of digital trends to provide cutting-edge solutions for our clients.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class=" overflow-hidden">
+            <img
+              src="img.png"
+              alt="AyanIQ Digital Team - Digital Marketing Experts"
+              class="w-full h-auto object-cover rounded-xl shadow-lg"
+              onerror="this.src='https://via.placeholder.com/600x400/FFFFFF/FF4500?text=AyanIQ+Digital+Team'"
+            >
+          </div>
+        </div>
+
+        <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="p-8 rounded-2xl bg-white shadow-xl border border-gray-100 hover-card text-center">
+            <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-bullseye text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Targeted Promotion</h3>
+            <p class="text-gray-600">We help you reach the right audience with precision-targeted digital campaigns across multiple platforms.</p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-white shadow-xl border border-gray-100 hover-card text-center">
+            <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-chart-line text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Data-Driven Results</h3>
+            <p class="text-gray-600">Our strategies are backed by analytics and insights to ensure measurable growth and ROI.</p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-white shadow-xl border border-gray-100 hover-card text-center">
+            <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-users text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Multi-Platform Presence</h3>
+            <p class="text-gray-600">We optimize your presence across search engines, social media, directories, and industry platforms.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-gray-900">Our <span class="text-accent">Promotion</span> Services</h2>
+          <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
+            Comprehensive digital promotion solutions for every type of business and professional
+          </p>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="p-8 rounded-xl border-2 border-gray-200 hover:border-accent transition-all duration-300 hover-card">
+            <div class="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-6">
+              <i class="fas fa-store text-accent text-xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Business Listings</h3>
+            <p class="text-gray-600">Premium listings on relevant directories with photos, reviews, and contact information.</p>
+          </div>
+
+          <div class="p-8 rounded-xl border-2 border-gray-200 hover:border-accent transition-all duration-300 hover-card">
+            <div class="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-6">
+              <i class="fas fa-user-tie text-accent text-xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Professional Profiles</h3>
+            <p class="text-gray-600">Verified professional profiles with credentials, expertise, and client testimonials.</p>
+          </div>
+
+          <div class="p-8 rounded-xl border-2 border-gray-200 hover:border-accent transition-all duration-300 hover-card">
+            <div class="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-6">
+              <i class="fas fa-megaphone text-accent text-xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Digital Marketing</h3>
+            <p class="text-gray-600">Targeted campaigns across search engines and social media to reach potential customers.</p>
+          </div>
+
+          <div class="p-8 rounded-xl border-2 border-gray-200 hover:border-accent transition-all duration-300 hover-card">
+            <div class="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-6">
+              <i class="fas fa-search text-accent text-xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">SEO Optimization</h3>
+            <p class="text-gray-600">Improve your search engine rankings to get found by people looking for your services.</p>
+          </div>
+
+          <div class="p-8 rounded-xl border-2 border-gray-200 hover:border-accent transition-all duration-300 hover-card">
+            <div class="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-6">
+              <i class="fas fa-star text-accent text-xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Reputation Management</h3>
+            <p class="text-gray-600">Build and maintain a positive online reputation through reviews and testimonials.</p>
+          </div>
+
+          <div class="p-8 rounded-xl border-2 border-gray-200 hover:border-accent transition-all duration-300 hover-card">
+            <div class="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-6">
+              <i class="fas fa-chart-pie text-accent text-xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Performance Analytics</h3>
+            <p class="text-gray-600">Track results, customer engagement, and ROI with comprehensive analytics dashboards.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Clients Section -->
+    <section id="clients" class="py-16 bg-neutralbg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-gray-900">Our <span class="text-accent">Esteemed</span> Clients</h2>
+          <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
+            We proudly serve businesses and professionals across various industries
+          </p>
+        </div>
+
+        <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 flex items-center justify-center hover-card">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-accent mb-2">Healthcare</div>
+              <div class="text-sm text-gray-600">Hospitals & Clinics</div>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 flex items-center justify-center hover-card">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-accent mb-2">Education</div>
+              <div class="text-sm text-gray-600">Institutes & Tutors</div>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 flex items-center justify-center hover-card">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-accent mb-2">Legal</div>
+              <div class="text-sm text-gray-600">Law Firms & Lawyers</div>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 flex items-center justify-center hover-card">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-accent mb-2">Retail</div>
+              <div class="text-sm text-gray-600">Stores & E-commerce</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-16 bg-white p-10 rounded-2xl border border-gray-200 shadow-lg">
+          <h3 class="font-bold text-2xl mb-8 text-center text-gray-900">Client <span class="text-accent">Success</span> Stories</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-6 border-l-4 border-accent bg-gray-50 rounded-r-lg">
+              <p class="text-gray-700 text-lg italic">"AyanIQ Digital transformed our local business into a regional brand. Our customer inquiries increased by 300% in just 6 months!"</p>
+              <div class="mt-6 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center">
+                  <i class="fas fa-user text-accent"></i>
+                </div>
+                <div>
+                  <div class="font-bold">Sarah Johnson</div>
+                  <div class="text-sm text-gray-600">Owner, Urban Cafe Chain</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 border-l-4 border-accent bg-gray-50 rounded-r-lg">
+              <p class="text-gray-700 text-lg italic">"As a freelance consultant, AyanIQ helped me establish my online presence. I now have a steady stream of high-quality clients."</p>
+              <div class="mt-6 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center">
+                  <i class="fas fa-user text-accent"></i>
+                </div>
+                <div>
+                  <div class="font-bold">Michael Chen</div>
+                  <div class="text-sm text-gray-600">Business Strategy Consultant</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consultation Section -->
+    <section id="consultation" class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-4xl font-bold text-gray-900">Free <span class="text-accent">Digital</span> Consultation</h2>
+            <p class="mt-4 text-lg text-gray-700">Schedule a free consultation with our digital experts to understand how we can help grow your business or professional practice.</p>
+
+            <div class="mt-8 space-y-6">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-check text-accent"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg">Digital Strategy Assessment</h4>
+                  <p class="text-gray-600">Evaluate your current online presence and identify growth opportunities</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-check text-accent"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg">Competitor Analysis</h4>
+                  <p class="text-gray-600">Understand how you compare with others in your industry</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fas fa-check text-accent"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg">Customized Solutions</h4>
+                  <p class="text-gray-600">Get personalized recommendations for your digital growth</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-10 rounded-2xl shadow-xl border-2 border-accent/20">
+            <h3 class="text-2xl font-bold mb-6 text-gray-900">Schedule Your <span class="text-accent">Free</span> Consultation</h3>
+
+            <!-- Status Message Container -->
+            <div id="consultationMessage" class="hidden mb-6 p-4 rounded-lg border text-center"></div>
+
+            <form id="consultationForm" class="space-y-5">
+              <input type="text" id="consultationName" placeholder="Your Name" required class="w-full px-5 py-4 rounded-lg border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none">
+              <input type="email" id="consultationEmail" placeholder="Email Address" required class="w-full px-5 py-4 rounded-lg border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none">
+              <input type="tel" id="consultationPhone" placeholder="Phone Number" required class="w-full px-5 py-4 rounded-lg border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none">
+              <input type="text" id="consultationBusiness" placeholder="Business/Service Name" required class="w-full px-5 py-4 rounded-lg border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none">
+              <select id="consultationTime" required class="w-full px-5 py-4 rounded-lg border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none">
+                <option value="">Preferred Consultation Time</option>
+                <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
+                <option value="Afternoon (12 PM - 4 PM)">Afternoon (12 PM - 4 PM)</option>
+                <option value="Evening (4 PM - 7 PM)">Evening (4 PM - 7 PM)</option>
+              </select>
+              <button type="submit" id="consultationSubmit" class="w-full px-5 py-4 rounded-lg text-white font-bold text-lg blood-orange-gradient hover:opacity-90 transition-opacity shadow-md flex items-center justify-center gap-2">
+                <span>Schedule Now</span>
+                <i class="fas fa-paper-plane hidden" id="submitIcon"></i>
+              </button>
+            </form>
+
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Careers Section - Team Roles -->
+    <section id="careers" class="py-16 bg-neutralbg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-gray-900">Meet <span class="text-accent">Our Digital Team</span></h2>
+          <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
+            The experts behind your digital success
+          </p>
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-chart-line text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Digital Marketing Strategist</h3>
+            <p class="text-gray-600 mb-5">Develops comprehensive digital marketing campaigns and analyzes market trends.</p>
+            <div class="flex gap-2 flex-wrap justify-center mb-6">
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">SEO</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">PPC</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Analytics</span>
+            </div>
+            <div class="text-accent font-bold text-lg">Core Team Member</div>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-pen-nib text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Content Creator & SEO Specialist</h3>
+            <p class="text-gray-600 mb-5">Creates engaging content optimized for search engines and user experience.</p>
+            <div class="flex gap-2 flex-wrap justify-center mb-6">
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Content</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">SEO</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Copywriting</span>
+            </div>
+            <div class="text-accent font-bold text-lg">Core Team Member</div>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-users text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Social Media Manager</h3>
+            <p class="text-gray-600 mb-5">Manages brand presence across social platforms and engages with audiences.</p>
+            <div class="flex gap-2 flex-wrap justify-center mb-6">
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Social Media</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Engagement</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Community</span>
+            </div>
+            <div class="text-accent font-bold text-lg">Core Team Member</div>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-code text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Web Developer & UX Designer</h3>
+            <p class="text-gray-600 mb-5">Builds and optimizes websites for performance, speed, and user experience.</p>
+            <div class="flex gap-2 flex-wrap justify-center mb-6">
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Web Dev</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">UX/UI</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Performance</span>
+            </div>
+            <div class="text-accent font-bold text-lg">Tech Team</div>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-video text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Multimedia & Graphics Designer</h3>
+            <p class="text-gray-600 mb-5">Creates visual content including graphics, videos, and multimedia assets.</p>
+            <div class="flex gap-2 flex-wrap justify-center mb-6">
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Graphics</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Video</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Animation</span>
+            </div>
+            <div class="text-accent font-bold text-lg">Creative Team</div>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-headset text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Client Success & Account Manager</h3>
+            <p class="text-gray-600 mb-5">Ensures client satisfaction and manages ongoing digital strategy implementation.</p>
+            <div class="flex gap-2 flex-wrap justify-center mb-6">
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">CRM</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Strategy</span>
+              <span class="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full">Support</span>
+            </div>
+            <div class="text-accent font-bold text-lg">Client Relations</div>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <div class="inline-block p-6 bg-white rounded-xl border-2 border-accent/30 shadow-lg">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Our <span class="text-accent">Digital Expertise</span></h3>
+            <p class="text-gray-700 max-w-2xl mx-auto">
+              We combine strategy, creativity, and technology to deliver exceptional digital promotion results for our clients.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-neutralbg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-gray-900">Why Choose <span class="text-accent">AyanIQ Digital</span>?</h2>
+          <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
+            A comprehensive digital promotion platform that puts your business, service, or professional profile front-and-center for your target audience.
+          </p>
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="p-8 rounded-xl border-2 border-gray-200 bg-white shadow-lg hover:shadow-xl transition-shadow hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-check-circle text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Verified Listings</h3>
+            <p class="text-gray-600">Add verified credentials, photos, and authentic testimonials to build trust.</p>
+          </div>
+
+          <div class="p-8 rounded-xl border-2 border-gray-200 bg-white shadow-lg hover:shadow-xl transition-shadow hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-bullhorn text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Multi-Channel Promotion</h3>
+            <p class="text-gray-600">Promote across search engines, social media, directories, and industry platforms.</p>
+          </div>
+
+          <div class="p-8 rounded-xl border-2 border-gray-200 bg-white shadow-lg hover:shadow-xl transition-shadow hover-card text-center">
+            <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center mb-6 mx-auto">
+              <i class="fas fa-trophy text-accent text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-xl mb-4">Premium Visibility</h3>
+            <p class="text-gray-600">Featured spots on top of search results and category pages for maximum exposure.</p>
+          </div>
+        </div>
+
+        <!-- CTA to Promotion Page -->
+        <div class="mt-16 text-center">
+          <div class="bg-white p-12 rounded-2xl shadow-2xl border-2 border-accent/30">
+            <h3 class="text-3xl font-bold text-gray-900 mb-6">Ready to Grow Your <span class="text-accent">Digital Presence</span>?</h3>
+            <p class="text-gray-700 text-lg mb-8 max-w-2xl mx-auto">
+              Join hundreds of successful businesses and professionals who trust AyanIQ Digital for their promotion needs.
+            </p>
+            <a href="promote.html" class="inline-flex items-center gap-3 px-10 py-5 rounded-xl blood-orange-gradient text-white font-bold text-xl hover:opacity-90 transition-colors transform hover:scale-105 duration-300 shadow-lg">
+              Start Promoting Now
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer with White Background -->
+    <footer id="contact" class="footer-bg py-12 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 footer-content">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+          <div>
+            <div class="font-timesnewroman text-3xl font-bold text-gray-900 mb-4">AyanIQ Digital</div>
+            <div class="text-gray-700 mb-6 font-medium">
+              Empowering businesses and professionals with strategic digital promotion since 2023.
+            </div>
+            <div class="mt-6 flex gap-4">
+              <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:text-accent hover:border-accent shadow-sm hover:bg-accent/10">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:text-accent hover:border-accent shadow-sm hover:bg-accent/10">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:text-accent hover:border-accent shadow-sm hover:bg-accent/10">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:text-accent hover:border-accent shadow-sm hover:bg-accent/10">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <div class="font-bold text-gray-900 text-lg mb-5">Quick Links</div>
+            <nav class="space-y-3">
+              <a class="block text-gray-700 hover:text-accent transition-colors font-medium hover:translate-x-1 duration-200" href="index.html">Home</a>
+              <a class="block text-gray-700 hover:text-accent transition-colors font-medium hover:translate-x-1 duration-200" href="#about">About Us</a>
+              <a class="block text-gray-700 hover:text-accent transition-colors font-medium hover:translate-x-1 duration-200" href="#services">Services</a>
+              <a class="block text-gray-700 hover:text-accent transition-colors font-medium hover:translate-x-1 duration-200" href="#clients">Clients</a>
+            </nav>
+          </div>
+
+          <div>
+            <div class="font-bold text-gray-900 text-lg mb-5">Services</div>
+            <nav class="space-y-3">
+              <a class="block text-gray-700 hover:text-accent transition-colors font-medium hover:translate-x-1 duration-200" href="promote.html">Promotion Services</a>
+              <a class="block text-gray-700 hover:text-accent transition-colors font-medium hover:translate-x-1 duration-200" href="#consultation">Consultation</a>
+              <a class="block text-gray-700 hover:text-accent transition-colors font-medium hover:translate-x-1 duration-200" href="#careers">Careers</a>
+              <a class="block text-gray-700 hover:text-accent transition-colors font-medium hover:translate-x-1 duration-200" href="#blog">Blog</a>
+            </nav>
+          </div>
+
+          <div>
+            <div class="font-bold text-gray-900 text-lg mb-5">Contact Us</div>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <i class="fas fa-envelope text-accent mt-1"></i>
+                <span class="text-gray-700 font-medium">contact@ayaniqdigital.com</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="fas fa-phone text-accent mt-1"></i>
+                <span class="text-gray-700 font-medium">+91 90000 00000</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="fas fa-map-marker-alt text-accent mt-1"></i>
+                <span class="text-gray-700 font-medium">Hyderabad, Telangana</span>
+              </div>
+            </div>
+<!--            <div class="mt-8 p-4 bg-white/80 rounded-lg border border-gray-200 shadow-sm">-->
+<!--              <p class="text-sm text-gray-600">Subscribe to our newsletter</p>-->
+<!--              <div class="mt-2 flex">-->
+<!--                <input type="email" placeholder="Your email" class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-accent">-->
+<!--                <button class="blood-orange-gradient text-white px-4 py-2 rounded-r-lg hover:opacity-90 transition-colors">-->
+<!--                  <i class="fas fa-paper-plane"></i>-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
+          </div>
+        </div>
+
+        <div class="mt-12 pt-8 border-t border-gray-300 text-center">
+          <p class="text-gray-700 font-medium">
+            © 2023 AyanIQ Digital. All rights reserved. |
+            <a href="#" class="text-accent font-bold hover:underline">Privacy Policy</a> |
+            <a href="#" class="text-accent font-bold hover:underline">Terms of Service</a>
+          </p>
+          <p class="mt-2 text-sm text-gray-600">
+            Digital Marketing • SEO • Website • Email Marketing • Advertising Solutions
+          </p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+        mobileMenu.classList.add('hidden');
+      }
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Responsive behavior
+    window.addEventListener('resize', function() {
+      if (window.innerWidth >= 1024) {
+        mobileMenu.classList.add('hidden');
+      }
+    });
+  </script>
+
+  <!-- Firebase Consultation Script -->
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCw0jYC9U43HVkahgvZhduhEdQVXgD_Uh0",
+      authDomain: "digital-marketing-ec0f7.firebaseapp.com",
+      databaseURL: "https://digital-marketing-ec0f7-default-rtdb.firebaseio.com",
+      projectId: "digital-marketing-ec0f7",
+      storageBucket: "digital-marketing-ec0f7.firebasestorage.app",
+      messagingSenderId: "206707116913",
+      appId: "1:206707116913:web:afa302ac71a03d5ffa04d0",
+      measurementId: "G-MLE6GTWEN7"
+    };
+
+    // Initialize Firebase
+    let firebaseInitialized = false;
+    let database = null;
+
+    function initializeFirebase() {
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        database = firebase.database();
+        firebaseInitialized = true;
+        console.log("Firebase initialized successfully");
+        return true;
+      } catch (error) {
+        console.error("Firebase initialization error:", error);
+        return false;
+      }
+    }
+
+    // Initialize Firebase on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeFirebase();
+    });
+
+    // Generate unique consultation ID
+    function generateConsultationId() {
+      const date = new Date();
+      const timestamp = date.getTime();
+      const random = Math.random().toString(36).substr(2, 6).toUpperCase();
+      return `CONSULT-${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2,'0')}${date.getDate().toString().padStart(2,'0')}-${random}`;
+    }
+
+    // Get user's IP address
+    async function getIPAddress() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+      } catch (error) {
+        return "unknown";
+      }
+    }
+
+    // Validate email format
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    // Validate phone format
+    function validatePhone(phone) {
+      const cleaned = phone.replace(/\D/g, '');
+      return cleaned.length >= 10;
+    }
+
+    // Show message to user
+    function showMessage(message, type = 'success') {
+      const messageDiv = document.getElementById('consultationMessage');
+      messageDiv.className = `p-4 rounded-lg border text-center ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+      messageDiv.innerHTML = message;
+      messageDiv.classList.remove('hidden');
+
+      // Auto-hide success messages after 5 seconds
+      if (type === 'success') {
+        setTimeout(() => {
+          messageDiv.classList.add('hidden');
+        }, 5000);
+      }
+    }
+
+    // Create WhatsApp message
+    function createWhatsAppMessage(formData) {
+      const message = `*New Consultation Request - AyanIQ Digital*%0A%0A` +
+                      `*Name:* ${formData.name}%0A` +
+                      `*Business:* ${formData.business}%0A` +
+                      `*Email:* ${formData.email}%0A` +
+                      `*Phone:* ${formData.phone}%0A` +
+                      `*Preferred Time:* ${formData.preferredTime}%0A` +
+                      `*Consultation ID:* ${formData.consultationId}%0A` +
+                      `*Submitted:* ${new Date().toLocaleString()}%0A%0A` +
+                      `Please follow up with the client.`;
+      return message;
+    }
+
+    // Submit consultation form
+    async function submitConsultationForm(e) {
+      e.preventDefault();
+
+      const form = document.getElementById('consultationForm');
+      const submitBtn = document.getElementById('consultationSubmit');
+      const submitIcon = document.getElementById('submitIcon');
+      const messageDiv = document.getElementById('consultationMessage');
+
+      // Hide any previous messages
+      messageDiv.classList.add('hidden');
+
+      // Get form values
+      const name = document.getElementById('consultationName').value.trim();
+      const email = document.getElementById('consultationEmail').value.trim();
+      const phone = document.getElementById('consultationPhone').value.trim();
+      const business = document.getElementById('consultationBusiness').value.trim();
+      const preferredTime = document.getElementById('consultationTime').value;
+
+      // Validate form
+      if (!name || !email || !phone || !business || !preferredTime) {
+        showMessage('Please fill in all required fields.', 'error');
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        showMessage('Please enter a valid email address.', 'error');
+        return;
+      }
+
+      if (!validatePhone(phone)) {
+        showMessage('Please enter a valid phone number (at least 10 digits).', 'error');
+        return;
+      }
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Submitting...</span>';
+      submitIcon.classList.remove('hidden');
+      form.classList.add('form-loading');
+
+      try {
+        // Ensure Firebase is initialized
+        if (!firebaseInitialized) {
+          initializeFirebase();
+        }
+
+        if (!database) {
+          throw new Error("Unable to connect to database. Please try again.");
+        }
+
+        // Generate consultation ID
+        const consultationId = generateConsultationId();
+
+        // Get IP address
+        const ipAddress = await getIPAddress();
+
+        // Prepare data for Firebase
+        const consultationData = {
+          name: name,
+          email: email,
+          phone: phone,
+          business: business,
+          preferredTime: preferredTime,
+          consultationId: consultationId,
+          timestamp: Date.now(),
+          date: new Date().toLocaleString(),
+          ipAddress: ipAddress,
+          status: 'pending'
+        };
+
+        // Save to Firebase Realtime Database
+        const newConsultationRef = database.ref('consultations').push();
+        await newConsultationRef.set(consultationData);
+
+        console.log("Data saved to Firebase with ID:", newConsultationRef.key);
+
+        // Create WhatsApp message
+        const whatsappMessage = createWhatsAppMessage(consultationData);
+
+        // WhatsApp number (update this with your actual WhatsApp business number)
+        const whatsappNumber = "8686038469"; // Replace with your number
+
+        // Create WhatsApp link
+        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+        // Show success message
+        showMessage(`✅ Consultation scheduled successfully! Your Consultation ID: <strong>${consultationId}</strong><br>We will contact you via WhatsApp shortly.`, 'success');
+
+        // Open WhatsApp in a new tab
+        setTimeout(() => {
+          window.open(whatsappLink, '_blank');
+        }, 1000);
+
+        // Reset form
+        form.reset();
+
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        showMessage(`❌ Error: ${error.message}. Please try again or contact us directly.`, 'error');
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Schedule Now</span>';
+        submitIcon.classList.add('hidden');
+        form.classList.remove('form-loading');
+      }
+    }
+
+    // Attach form submit event
+    document.addEventListener('DOMContentLoaded', function() {
+      const consultationForm = document.getElementById('consultationForm');
+      if (consultationForm) {
+        consultationForm.addEventListener('submit', submitConsultationForm);
+      }
+    });
+  </script>
+</body>
+</html>
