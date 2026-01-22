@@ -39,6 +39,7 @@
       }
     }
   </script>
+
   <style>
     .glass {
       backdrop-filter: blur(6px);
@@ -174,26 +175,64 @@
   <header class="sticky top-0 z-50 glass border-b border-slate-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
-        <a href="index.html" class="flex items-center gap-3">
-          <div class="text-sm font-semibold">
-            <div class="font-timesnewroman text-2xl text-gray-900">AyanIQ Digital</div>
+        <!-- Logo with Image Only -->
+        <a href="index.html" class="flex items-center">
+          <div class="w-160 h-36">
+            <img src="logo.png" alt="AyanIQ Digital Logo" class="w-full h-full">
           </div>
         </a>
 
-        <!-- Desktop Navigation -->
-        <nav class="hidden lg:flex items-center gap-6">
-          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="index.html">Home</a>
-          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#about">About Us</a>
-          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#services">Services</a>
-          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#clients">Clients</a>
-          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#consultation">Consultation</a>
-          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#careers">Careers</a>
-          <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#contact">Contact Us</a>
-        </nav>
+        <!-- Desktop Navigation with Contact Info -->
+        <div class="hidden lg:flex items-center gap-8">
+          <!-- Navigation Links -->
+          <nav class="flex items-center gap-6">
+            <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="index.html">Home</a>
+            <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#about">About Us</a>
+            <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#services">Services</a>
+            <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#clients">Clients</a>
+            <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#consultation">Consultation</a>
+            <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#careers">Careers</a>
+            <a class="nav-link text-sm font-medium hover:text-accent transition-colors" href="#contact">Contact Us</a>
+          </nav>
 
-        <!-- Right side - CTA and mobile menu -->
+          <!-- Separator -->
+          <div class="h-6 w-px bg-gray-300"></div>
+
+          <!-- Contact Info -->
+          <div class="flex flex-col gap-1">
+            <!-- Email -->
+            <a href="mailto:contact@ayaniq.com"
+               class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-accent transition-colors">
+              <i class="fas fa-envelope text-accent text-xs"></i>
+              <span>contact@ayaniq.com</span>
+            </a>
+
+            <!-- Phone -->
+            <a href="tel:+918686038469"
+               class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-accent transition-colors">
+              <i class="fas fa-phone text-accent text-xs"></i>
+              <span>+91 86860 38469</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right side - CTA and mobile menu (For Tablet/Mobile) -->
         <div class="flex items-center gap-4">
+          <!-- Contact Icons for Tablet -->
+          <div class="hidden sm:flex lg:hidden items-center gap-3">
+            <a href="mailto:contact@ayaniq.com"
+               class="flex items-center justify-center w-8 h-8 rounded-full border border-slate-200 text-gray-700 hover:text-accent hover:border-accent transition-colors"
+               title="Email: contact@ayaniq.com">
+              <i class="fas fa-envelope text-sm"></i>
+            </a>
+
+            <a href="tel:+918686038469"
+               class="flex items-center justify-center w-8 h-8 rounded-full border border-slate-200 text-gray-700 hover:text-accent hover:border-accent transition-colors"
+               title="Call: +91 86860 38469">
+              <i class="fas fa-phone text-sm"></i>
+            </a>
+          </div>
+
           <a href="promote.html" class="hidden sm:inline-block px-4 py-2 rounded-md text-white font-medium blood-orange-gradient hover:opacity-90 transition-opacity shadow-md">Promote Now</a>
 
           <!-- Mobile menu button -->
@@ -214,6 +253,28 @@
         <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#consultation">Consultation</a>
         <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#careers">Careers</a>
         <a class="mobile-nav-link block px-3 py-2 rounded-md hover:bg-gray-50 font-medium" href="#contact">Contact Us</a>
+
+        <!-- Contact Info in Mobile Menu -->
+        <div class="pt-3 border-t border-gray-100 space-y-3">
+          <a href="mailto:contact@ayaniq.com"
+             class="flex items-center gap-3 px-3 py-2 rounded-md bg-blue-50 text-blue-700 font-medium hover:bg-blue-100">
+            <i class="fas fa-envelope w-5 text-center"></i>
+            <div class="flex-1">
+              <div class="text-xs text-gray-500">Email</div>
+              <div>contact@ayaniq.com</div>
+            </div>
+          </a>
+
+          <a href="tel:+918686038469"
+             class="flex items-center gap-3 px-3 py-2 rounded-md bg-green-50 text-green-700 font-medium hover:bg-green-100">
+            <i class="fas fa-phone w-5 text-center"></i>
+            <div class="flex-1">
+              <div class="text-xs text-gray-500">Phone</div>
+              <div>+91 86860 38469</div>
+            </div>
+          </a>
+        </div>
+
         <a href="promote.html" class="block px-3 py-2 mt-2 rounded-md text-white font-medium text-center blood-orange-gradient shadow-md">Promote Now</a>
       </div>
     </div>
@@ -454,6 +515,7 @@
               <div class="text-2xl font-bold text-accent mb-2">Retail</div>
               <div class="text-sm text-gray-600">Stores & E-commerce</div>
             </div>
+
           </div>
         </div>
 
@@ -723,7 +785,9 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 footer-content">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
-            <div class="font-timesnewroman text-3xl font-bold text-gray-900 mb-4">AyanIQ Digital</div>
+            <div class="w-160 h-36"> <!-- Increased size -->
+            <img src="logo.png" alt="AyanIQ Digital Logo" class="w-full h-full">
+          </div>
             <div class="text-gray-700 mb-6 font-medium">
               Empowering businesses and professionals with strategic digital promotion since 2023.
             </div>
@@ -779,23 +843,14 @@
                 <span class="text-gray-700 font-medium">Hyderabad, Telangana</span>
               </div>
             </div>
-<!--            <div class="mt-8 p-4 bg-white/80 rounded-lg border border-gray-200 shadow-sm">-->
-<!--              <p class="text-sm text-gray-600">Subscribe to our newsletter</p>-->
-<!--              <div class="mt-2 flex">-->
-<!--                <input type="email" placeholder="Your email" class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-accent">-->
-<!--                <button class="blood-orange-gradient text-white px-4 py-2 rounded-r-lg hover:opacity-90 transition-colors">-->
-<!--                  <i class="fas fa-paper-plane"></i>-->
-<!--                </button>-->
-<!--              </div>-->
-<!--            </div>-->
           </div>
         </div>
 
         <div class="mt-12 pt-8 border-t border-gray-300 text-center">
           <p class="text-gray-700 font-medium">
             © 2023 AyanIQ Digital. All rights reserved. |
-            <a href="#" class="text-accent font-bold hover:underline">Privacy Policy</a> |
-            <a href="#" class="text-accent font-bold hover:underline">Terms of Service</a>
+            <a href="privacy_policy.html" class="text-accent font-bold hover:underline">Privacy Policy</a> |
+            <a href="terms_service.html" class="text-accent font-bold hover:underline">Terms of Service</a>
           </p>
           <p class="mt-2 text-sm text-gray-600">
             Digital Marketing • SEO • Website • Email Marketing • Advertising Solutions
